@@ -9,20 +9,25 @@ export default {
             title: "猜數字",
             min: 1,
             max: 100,
-            changMin: (this.input < this.answer && this.input > this.min),
-            changMax: (this.input > this.answer && this.input < this.max),
-            victory: this.input == this.answer
+            tF: false,
+            btn: "回答"
         }
     },
     methods: {
         guess() {
-            if (this.input == this.answer) {
-                this.min = null;
-                this.max = null;
-                this.gg = "猜到ㄌ";
-                this.title = "猜數字";
+            if (this.tF) {
+                this.tF = !this.tF;
+                this.answer = Math.floor(Math.random() * (100 - 1) + 1);
+                this.min = 1;
+                this.max = 100;
                 this.input = null;
+                this.btn = "回答";
             }
+            else if (this.input == this.answer) {
+                this.tF = !this.tf;
+                this.btn = "再玩一局";
+            }
+
             else if (this.input < this.answer && this.input > this.min) {
                 this.min = this.input;
                 this.title = "猜數字";
@@ -49,16 +54,19 @@ export default {
 </script>
 
 <template>
-
     <div class="field2">
         <h1>{{ title }}</h1>
-        <div class="field3">
+        <div class="field3" v-if="tF">
+            <p>"猜到ㄌ"</p>
+
+        </div>
+        <div class="field3" v-else>
             <p>{{ min }}</p>
             <p>{{ gg }}</p>
             <p>{{ max }}</p>
         </div>
         <input type="number" v-model="input">
-        <button type="button" @click="guess">回答</button>
+        <button type="button" @click="guess">{{btn}}</button>
     </div>
 </template>
 
@@ -72,7 +80,7 @@ export default {
     border-radius: 8px;
     align-items: center;
     background-color: white;
-    margin:auto;
+    margin: auto;
     justify-content: space-around;
     top: 13vh;
 
@@ -94,14 +102,16 @@ export default {
         border: none;
         padding: 4px 16px;
         border-radius: 8px;
-        &:hover{
+
+        &:hover {
             transition: 0.2s;
             color: red;
             background-color: black;
             transform: scale(1.1);
 
         }
-        &:active{
+
+        &:active {
             transform: scale(0.9);
         }
     }
